@@ -1,15 +1,15 @@
 module.exports = async ({github, owner, repo, languages}) => {
 
   async function addCodeQLworkflow(github, owner, repo, languageString) {
-      
+
       const { readFileSync } = require('fs')
-      const path = '.github/workflows/codeql-analysis.yml'
+      const path = 'codeql-analysis.yml'
       let content = readFileSync(`${process.env.GITHUB_WORKSPACE}/${path}`, 'utf8')
       // replace the default language string with the new one
       const language = "language: [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python' ]"
       content = content.toString('utf8').replace(language, languageString)
-      
-      const targetPath = ".github/workflows/codeql-analysis.yml"                                    
+
+      const targetPath = ".github/workflows/codeql-analysis.yml"
       console.log(`JS Uploading the CodeQL workflow to the forked repository`)
       github.rest.repos.createOrUpdateFileContents({
           owner,
@@ -26,8 +26,8 @@ module.exports = async ({github, owner, repo, languages}) => {
       return targetPath
   }
 
-  async function deleteExistingWorkflows(github, owner, repo) {   
-      console.log(`JS Deleting existing workflows in the fork`) 
+  async function deleteExistingWorkflows(github, owner, repo) {
+      console.log(`JS Deleting existing workflows in the fork`)
       // load default branch from repo
       const {data: repository} = await github.rest.repos.get({
           owner,
@@ -35,7 +35,7 @@ module.exports = async ({github, owner, repo, languages}) => {
       })
 
       console.log(`JS Default_branch for repo [${repo}] is [${repository.default_branch}]`)
-      
+
       // get ref for default branch
       const ref = repository.default_branch
       try {
@@ -95,7 +95,7 @@ module.exports = async ({github, owner, repo, languages}) => {
     })
   }
 
-  function loadLanguagesToAnalyse(languages) {      
+  function loadLanguagesToAnalyse(languages) {
     // goal is to replace the line below with only the languages we get from Linguist:
     // language: [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python' ]
     console.log(`JS Languages inputs: [${JSON.stringify(languages)}]`)
@@ -107,7 +107,7 @@ module.exports = async ({github, owner, repo, languages}) => {
     if (languages.Csharp) {
       languagesToAnalyse.push('csharp')
     }
-    
+
     if (languages.Go) {
       languagesToAnalyse.push('go')
     }
@@ -121,7 +121,7 @@ module.exports = async ({github, owner, repo, languages}) => {
     }
     if (languages.JavaScript) {
       languagesToAnalyse.push('javascript')
-    }      
+    }
 
     // convert to string for the YAML file
     let languageString = 'language: ['

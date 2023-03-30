@@ -98,7 +98,7 @@ jobs:
     outputs:
       languages: ${{ steps.analysis.outputs.languages }}
     steps:
-      - uses: ruby/setup-ruby@v1
+      - uses: paritytech-actions/setup-ruby@v1
         name: Setup Ruby
         with:
           # Not needed with a .ruby-version file

@@ -1,7 +1,7 @@
 module.exports = async ({github, owner, repo}) => {
 
     async function getLastRun(github, owner, repo) {
-        let { data } = await github.rest.actions.listWorkflowRunsForRepo({ 
+        let { data } = await github.rest.actions.listWorkflowRunsForRepo({
             owner,
             repo
         })
@@ -18,7 +18,7 @@ module.exports = async ({github, owner, repo}) => {
         console.log(`codeQLRun info: id: [${codeQLRun.id}], status: [${codeQLRun.status}], created_at: [${codeQLRun.created_at}], conclusion: [${codeQLRun.conclusion}], workflow_id: [${codeQLRun.workflow_id}]`)
         return codeQLRun
     }
-    
+
     console.log(`Looking at this repository: [${owner}/${repo}]`)
     lastRun = await getLastRun(github, owner, repo)
     console.log(`lastRun: ${lastRun}`)
@@ -31,7 +31,7 @@ module.exports = async ({github, owner, repo}) => {
         ref: lastRun.head_branch,
     });
 
-    if (dispatchData.status !== 204) {	
+    if (dispatchData.status !== 204) {
         console.log(`Error starting the CodeQL workflow dispatch:`)
         console.log(`Start workflow result: [${JSON.stringify(dispatchData)}]`)
         return 1
@@ -48,7 +48,7 @@ module.exports = async ({github, owner, repo}) => {
 
     // wait for the workflow to finish
     await waitForScan(github, owner, repo, lastRun.id)
-    
+
     async function waitForScan(github, owner, repo, run_id) {
         console.log(`Waiting for the CodeQL run to finish: [${run_id}]`)
         const data  = await github.rest.actions.getWorkflowRun({
@@ -56,7 +56,7 @@ module.exports = async ({github, owner, repo}) => {
             repo,
             run_id
         })
-        
+
         console.log(`CodeQL run information of run with id: [${run_id}], status: [${data.data.status}] and conclusion: [${data.data.conclusion}]`)
         if (data.data.status !== 'completed') {
             await wait(60000)

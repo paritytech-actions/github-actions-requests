@@ -6,7 +6,7 @@ echo "| Check | Result |" > result.md
 echo "|---|---|" >> result.md
 
 if [ $HAS_GITHUB_FOLDER == false  ]; then
-    echo "| No .github folder found | ⛔️ |" >> result.md    
+    echo "| No .github folder found | ⛔️ |" >> result.md
 fi
 
 if [ $HAS_WORKFLOWS_FOLDER == false ]; then

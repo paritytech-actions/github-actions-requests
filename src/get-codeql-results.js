@@ -1,13 +1,13 @@
 module.exports = async ({github, owner, repo}) => {
-    
+
     console.log(`Found owner [${owner}] and repo [${repo}] to check the code scanning alerts for`)
 
     let recentScansData
-    try {        
+    try {
         recentScansData = await github.rest.codeScanning.listRecentAnalyses({
             owner,
             repo,
-        })    
+        })
     } catch (error) {
         console.log(`Error getting recent scans: [${error}]`)
     }
@@ -41,7 +41,7 @@ module.exports = async ({github, owner, repo}) => {
     // list all alerts, not just the most recent scan:
     let data
     try {
-        let { data } = await github.rest.codeScanning.listAlertsForRepo({ 
+        let { data } = await github.rest.codeScanning.listAlertsForRepo({
             owner,
             repo
         })
@@ -49,7 +49,7 @@ module.exports = async ({github, owner, repo}) => {
     catch (error) {
         console.log(`Error getting all alerts for the forked repository: [${error}]`)
     }
-    
+
     if (data === undefined) {
         console.log(`Alert response is undefined`)
     }

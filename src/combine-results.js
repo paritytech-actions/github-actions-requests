@@ -10,7 +10,7 @@ module.exports = async ({github, owner, repo, issue_number, codeql_run_link, cod
     console.log(`- environment: [${codeqlResult.environment}]`)
     console.log(`- created_at: [${codeqlResult.created_at}]`)
     console.log(`- securityScanResults: [${securityScanResult}]`)
-    
+
     let codeQLSymbol = ''
     if (codeqlResult.results_count === 0) {
         codeQLSymbol = ':white_check_mark:'
@@ -26,9 +26,9 @@ module.exports = async ({github, owner, repo, issue_number, codeql_run_link, cod
         `|---|---|---|`,
         `|CodeQL on the forked repo|${codeQLSymbol}|[CodeQL run](${codeql_run_link})|`,
         ``
-    ]   
+    ]
 
-    // load the securityScanResult file    
+    // load the securityScanResult file
     const scanResult = fs.readFileSync(securityScanResult);
     console.log(`scanResult: [${scanResult}]`)
     let securityBody = [
@@ -46,5 +46,5 @@ module.exports = async ({github, owner, repo, issue_number, codeql_run_link, cod
         issue_number,
         body: commentBody.join('\n')
     });
-    //console.log(`Issue created result: [${JSON.stringify(result)}]`)
-}  
+    console.log(`Issue created result: [${JSON.stringify(result)}]`)
+}

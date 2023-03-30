@@ -26,7 +26,7 @@ module.exports = async ({github, owner, repo}) => {
         owner,
         name: repo,
     });
-    
+
     console.log(`Found a total of [${repository.vulnerabilityAlerts.nodes.length}] vulnerability alerts (contains duplicates)`)
     const highAlerts = [ ... new Set(repository.vulnerabilityAlerts.nodes.filter(alert => alert.securityVulnerability.advisory.severity === 'HIGH').map(alert => alert.securityVulnerability.package.name))]
     const moderateAlerts = [ ... new Set(repository.vulnerabilityAlerts.nodes.filter(alert => alert.securityVulnerability.advisory.severity === 'MODERATE').map(alert => alert.securityVulnerability.package.name))]

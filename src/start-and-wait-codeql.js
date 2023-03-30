@@ -3,12 +3,12 @@ module.exports = async ({github, owner, repo, path, ref}) => {
     function getDateFromString(dateString) {
         return new Date(dateString)
     }
-    
+
     async function triggerScans(github, owner, repo, path, ref) {
 
-        if (path.indexOf('/') > 0) { 
+        if (path.indexOf('/') > 0) {
             const paths = path.split('/')
-            path = paths[paths.length - 1]            
+            path = paths[paths.length - 1]
         }
         console.log(`Working with workflow path [${path}] and ref [${ref}]`)
 
@@ -24,7 +24,7 @@ module.exports = async ({github, owner, repo, path, ref}) => {
 
             // wait for the backend to handle the request completely, before we read the status
             await wait(5000)
-            
+
             // load all the worfklow runs
             // https://docs.github.com/en/rest/reference/actions#list-workflow-runs-for-a-repository
             const {
@@ -45,7 +45,7 @@ module.exports = async ({github, owner, repo, path, ref}) => {
             }
 
             // wait for the scanner to finish
-            if (run_id > 0) {                
+            if (run_id > 0) {
                 const scanResult = await waitForScan(github, owner, repo, run_id, lastRun)
                 return {scanResult, run_id}
             }
@@ -72,7 +72,7 @@ module.exports = async ({github, owner, repo, path, ref}) => {
         if (status !== 'completed') {
           await wait(15000)
           return await waitForScan(github, owner, repo, run_id, lastRun)
-        } 
+        }
         else {
           if (conclusion !== 'success' && conclusion !== null) {
             //throw new Error(`${name} concluded with status ${conclusion} (${html_url}).`)

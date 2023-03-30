@@ -9,16 +9,16 @@ function github_folder_checks() {
         echo ::set-output name=has_workflows_folder::false
         echo ::set-output name=has_dependabot_configuration::false
         echo ::set-output name=has_codeql_init::false
-        echo ::set-output name=has_codeql_analyze::false        
+        echo ::set-output name=has_codeql_analyze::false
 
         exit 0
     fi
 
     echo ::set-output name=has_github_folder::true
 
-    if [[ -n $(find action/.github -maxdepth 1 -name dependabot.yml) ]] ; then 
+    if [[ -n $(find action/.github -maxdepth 1 -name dependabot.yml) ]] ; then
         echo ::set-output name=has_dependabot_configuration::true
-    else 
+    else
         echo ::set-output name=has_dependabot_configuration::false
     fi
 
@@ -76,7 +76,7 @@ function action_docker_checks() {
         IMAGE=`yq e '.runs.image' action/action.yml`
         if  [[ $IMAGE = docker://* ]] ; then
             IMAGE=${IMAGE#docker://}
-        fi 
+        fi
         echo "Scan docker image with trivy [$IMAGE]"
         trivy --quiet image $IMAGE > issues
     fi
@@ -95,12 +95,12 @@ function action_docker_checks() {
         echo ::set-output name=has_low_medium_issues::true
     else
         echo ::set-output name=has_low_medium_issues::false
-    fi 
+    fi
 
     # Check if HIGH or CRITICAL issues are found (remove count from header)
     HIGH_CRITICAL_ISSUES=$(cat issues | grep -e HIGH -e CRITICAL | wc -l)
     echo " - $HIGH_CRITICAL_ISSUES high and crititcal issues found"
-    
+
     if [ $HIGH_CRITICAL_ISSUES -gt 0 ] ; then
         echo ::set-output name=high_critical_issues::$HIGH_CRITICAL_ISSUES
         echo ::set-output name=has_high_critical_issues::true

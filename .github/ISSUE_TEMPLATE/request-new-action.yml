@@ -2,7 +2,7 @@ name: Request new action
 description: Request new action to be added to the internal marketplace
 title: "New action request: <name of action here>"
 assignees:
-  - rajbos
+  - sergejparityadm
 body:
   - type: markdown
     attributes:

@@ -50,7 +50,6 @@ jobs:
         result-encoding: string
         script: |
           const script = require('./src/find-action-from-issue.js')
-
           const owner = context.repo.owner
           const repo = context.repo.repo
           let issue_number = context.issue.number
@@ -257,14 +256,14 @@ jobs:
       - get-languages-from-action
     outputs:
       codeql: ${{ steps.get-codeql-results.outputs.codeql }}
-      codeql_run_id: ${{ steps.CodeQL-inject.outputs.codeql_run_id }}
+      codeql_run_id: ${{ steps.codeql-inject.outputs.codeql_run_id }}
     steps:
     # todo: what if the action.yml indicates it runs in a docker image? Then we have not neccesarily a way to run CodeQL on actual CODE
     - uses: actions/checkout@v3
     - uses: actions/github-script@v6
       name: Inject CodeQL workflow into new forked repository
       # todo: clear all other workflows first, to prevent them from running
-      id: CodeQL-inject
+      id: codeql-inject
       with:
         github-token: ${{ secrets.GH_TOKEN }}
         script: |
@@ -294,7 +293,7 @@ jobs:
              console.log(`GHA CodeQL workflow with run_id [${run_id}] failed with exit code ${scanResult}`)
            }
 
-           console.log(`::set-output name=codeql_run_id::'${run_id}'`)
+           core.setOutput('codeql_run_id', run_id );
 
     - uses: actions/github-script@v6
       name: Get resuls from CodeQL scan
@@ -311,7 +310,7 @@ jobs:
            const result = await script({github, owner, repo})
            console.log(`GHA CodeQL scan completed with result: ${JSON.stringify(result)}`)
            const output = JSON.stringify(result)
-           console.log(`::set-output name=codeql::'${output}'`)
+           core.setOutput('codeql', output);
 
   display-results:
     needs:
@@ -340,10 +339,9 @@ jobs:
           script: |
             const fs = require('fs');
             const codeql = `${{ needs.codeql.outputs.codeql }}`
-            console.log(`FULL: [${codeql}]`)
-            console.log(`GHA CodeQL scan substring: [${codeql.substring(1, codeql.length - 1)}]`)
+            const codeql_run_id = "${{ needs.codeql.outputs.codeql_run_id }}"
 
-            const codeqlResult = JSON.parse(codeql.substring(1, codeql.length - 1))
+            const codeqlResult = JSON.parse(codeql)
             if (${{ env.debug }}) {
               console.log(`GHA CodeQL scan results:`)
               console.log(`GHA - url: ${codeqlResult.url}`)
@@ -352,22 +350,15 @@ jobs:
               console.log(`GHA - created_at: [${codeqlResult.created_at}]`)
             }
 
-            // const owner = '${{ needs.find-action-name.outputs.request_owner }}'
-            // const repo = "${{ needs.find-action-name.outputs.request_repo }}"
-            const owner = "${{ github.repository_owner }}"
-            const repo = "${{ github.event.repository.name }}"
-            // const repo = "github-actions-requests"
+            const owner = '${{ needs.find-action-name.outputs.request_owner }}'
+            const repo = "${{ needs.find-action-name.outputs.request_repo }}"
             const issue = "${{ needs.find-action-name.outputs.request_issue }}"
-            // const issue = "${{ github.event.inputs.issue }}"
-            const codeql_run_id = ${{ needs.codeql.outputs.codeql_run_id }}
 
             // build up link to CodeQL workflow execution
             const forkedRepoOwner = "${{ env.fork-owner }}"
             const forkedRepoName = "${{ needs.find-action-name.outputs.name }}"
             const codeql_run_link = `https://github.com/${forkedRepoOwner}/${forkedRepoName}/actions/runs/${codeql_run_id}`
 
-            console.log(`GHA--- BEFORE RUNNING ./src/combine-results.js ---owner: ${owner} - - repo: ${repo} -  - issue_number: ${issue} - forkedRepoOwner: ${forkedRepoOwner}`)
             const script = require('./src/combine-results.js')
             const securityFile = `/home/runner/work/github-actions-requests/github-actions-requests/security-scan-result/result.md` // todo: read work dir from env var
             await script({github, owner, repo, issue_number: issue, codeql_run_link, codeqlResult, securityScanResult: securityFile, fs})
-            console.log(`--- FINISH ---`)

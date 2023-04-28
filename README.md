@@ -30,6 +30,7 @@ For configuration of the workflows in this repository, we use the following secr
 These are the secrets that it uses:
 |Name|Example value|Description|
 |---|---|---|
-|PROJECT_ACCOUNT|rajbos|Account name under which the project is linked to|
-|PROJECT_NUMBER|2|The number of the project|
+|PROJECT_ACCOUNT|paritytech-actions|Account name under which the project is linked to|
+|PROJECT_NUMBER|1|The number of the project|
 |PROJECT_TOKEN|ghp_*****************|A token with access to add issues to the project|
+

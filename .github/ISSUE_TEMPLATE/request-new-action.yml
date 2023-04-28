@@ -2,7 +2,7 @@ name: Request new action
 description: Request new action to be added to the internal marketplace
 title: "New action request: <name of action here>"
 assignees:
-  - sergejparityadm
+  - paritytech-actions/gha-review-team
 body:
   - type: markdown
     attributes:
@@ -16,7 +16,7 @@ body:
     attributes:
       label: Action name
       description: The name of the action you want to request after `uses:` in the format `owner/repository`
-      value: "uses: "
+      value: "uses: <name of action here>"
     validations:
       required: true
   - type: textarea

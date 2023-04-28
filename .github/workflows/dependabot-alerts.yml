@@ -96,14 +96,14 @@ jobs:
             results = await script({github, owner, repo})
 
             console.log(`result: ${JSON.stringify(results)}`)
-            console.log(`::set-output name=dependabot_high::${results.high}`)
-            console.log(`::set-output name=dependabot_moderate::${results.moderate}`)
+            core.setOutput('dependabot_high', results.high)
+            core.setOutput('dependabot_moderate', results.moderate)
            }
            else {
               console.log(`Dependabot security alerts have not been enabled for the repo ${owner}/${repo}, skipping the scan`)
 
-              console.log(`::set-output name=dependabot_high::999`)
-              console.log(`::set-output name=dependabot_moderate::999`)
+              core.setOutput('dependabot_high', 999)
+              core.setOutput('dependabot_moderate', 999)
 
               results = {high: 999, moderate: 999}
            }

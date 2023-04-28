@@ -1,5 +1,5 @@
 # GitHub Actions Requests
-This repository is meant to hold the setup for requesting actions to be used internally, for example together with the [Internal Actions Marketplace](https://devopsjournal.io/blog/2021/10/14/GitHub-Actions-Internal-Marketplace).
+This repository is meant to hold the setup for requesting actions to be used internally in [`paritytech`](https://github.com/paritytech) organization
 
 # Process description
 1. User creates a new issue in this repo
@@ -33,4 +33,3 @@ These are the secrets that it uses:
 |PROJECT_ACCOUNT|paritytech-actions|Account name under which the project is linked to|
 |PROJECT_NUMBER|1|The number of the project|
 |PROJECT_TOKEN|ghp_*****************|A token with access to add issues to the project|
-

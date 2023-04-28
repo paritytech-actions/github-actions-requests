@@ -13,7 +13,7 @@ jobs:
         name: Tag a user or team in an issue comment
         with:
           issue: ${{ github.event.issue.number }}
-          team: 'paritytech-actions/test-team'
+          team: 'paritytech-actions/gha-review-team'
           owner: ${{ github.repository_owner }}
           repo: ${{ github.repository }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

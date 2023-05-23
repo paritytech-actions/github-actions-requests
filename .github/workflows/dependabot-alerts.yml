@@ -12,7 +12,7 @@ on:
         default: '11'
 
 env:
-  fork-owner: paritytech-actions # where the forks are place
+  fork-owner: paritytech-actions-sandbox # where the forks are placed
 
 jobs:
   find-action-name:

@@ -12,7 +12,7 @@ jobs:
     if: github.event.label.name == 'final-signoff'
     uses: paritytech-actions/github-actions-requests/.github/workflows/get-action-from-issue.yml@main
     with:
-      issue_number: ${{ github.event.inputs.issue }}
+      issue_number: ${{ github.event.issue.number }}
 
   fork-the-action:
     runs-on: ubuntu-latest
